@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحليل الشركة — Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #16161f;
+    --border: rgba(255,255,255,0.07);
+    --accent: #c8a96e;
+    --accent2: #e8c987;
+    --accent-dim: rgba(200,169,110,0.15);
+    --text: #f0ede8;
+    --text-muted: #8a8a9a;
+    --text-dim: #555568;
+    --red: #e05555;
+    --yellow: #e0b955;
+    --green: #55b87a;
+    --section-num: rgba(200,169,110,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; right: 0;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 999;
+    transition: width 0.1s linear;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; right: 0; left: 0;
+    z-index: 100;
+    padding: 0 48px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(200,169,110,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(200,169,110,0.3);
+    padding: 6px 20px;
+    border-radius: 2px;
+    margin-bottom: 40px;
+    display: inline-block;
+  }
+
+  .hero-title {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+
+  .hero-title span {
+    color: var(--accent);
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto 60px;
+    font-weight: 300;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 60px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 80px;
+  }
+
+  .hero-stat {
+    text-align: center;
+  }
+
+  .hero-stat-num {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .scroll-hint {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  /* ── TABLE OF CONTENTS ── */
+  .toc-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 48px;
+  }
+
+  .toc-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .toc-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .toc-links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .toc-links a {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 5px 14px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .toc-links a:hover {
+    color: var(--accent);
+    border-color: rgba(200,169,110,0.4);
+    background: var(--accent-dim);
+  }
+
+  /* ── SECTIONS ── */
+  .report-section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 100px 48px;
+    position: relative;
+  }
+
+  .section-number {
+    font-size: 120px;
+    font-weight: 900;
+    color: var(--section-num);
+    position: absolute;
+    top: 60px;
+    right: 0;
+    line-height: 1;
+    pointer-events: none;
+    font-family: 'Tajawal', sans-serif;
+    user-select: none;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  .section-title {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 800;
+    margin-bottom: 56px;
+    line-height: 1.2;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ── CARDS ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(200,169,110,0.3);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .card-body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .tag {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .tag.gold { border-color: rgba(200,169,110,0.4); color: var(--accent); background: var(--accent-dim); }
+
+  /* ── AUDIT METERS ── */
+  .meters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .meter-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .meter-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    min-width: 160px;
+  }
+
+  .meter-bar-wrap {
+    flex: 1;
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .meter-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%;
+    transition: width 1s ease;
+  }
+
+  .meter-val {
+    font-size: 12px;
+    color: var(--accent);
+    min-width: 36px;
+    text-align: left;
+  }
+
+  /* ── PROS / CONS ── */
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .pros-cons { grid-template-columns: 1fr; }
+  }
+
+  .pros-box, .cons-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+  }
+
+  .pros-box { border-top: 2px solid var(--green); }
+  .cons-box { border-top: 2px solid var(--red); }
+
+  .pc-title {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pros-box .pc-title { color: var(--green); }
+  .cons-box .pc-title { color: var(--red); }
+
+  .pc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pc-list li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-right: 16px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .pc-list li::before {
+    content: '—';
+    position: absolute;
+    right: 0;
+    color: var(--text-dim);
+  }
+
+  /* ── SWOT ── */
+  .swot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .swot-cell {
+    background: var(--surface);
+    padding: 36px;
+  }
+
+  .swot-cell-title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  .swot-cell:nth-child(1) .swot-cell-title { color: var(--green); }
+  .swot-cell:nth-child(2) .swot-cell-title { color: var(--red); }
+  .swot-cell:nth-child(3) .swot-cell-title { color: var(--accent); }
+  .swot-cell:nth-child(4) .swot-cell-title { color: #e05594; }
+
+  .swot-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .swot-list li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-right: 14px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .swot-list li::before {
+    content: '›';
+    position: absolute;
+    right: 0;
+    color: var(--text-dim);
+  }
+
+  /* ── RECS ── */
+  .recs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .rec-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 24px;
+    align-items: start;
+    transition: border-color 0.2s;
+  }
+
+  .rec-item:hover { border-color: rgba(200,169,110,0.25); }
+
+  .rec-num {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-dim);
+    line-height: 1;
+    padding-top: 2px;
+  }
+
+  .rec-content .rec-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .rec-content .rec-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .priority-badge {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .priority-red { background: rgba(224,85,85,0.12); color: var(--red); border: 1px solid rgba(224,85,85,0.25); }
+  .priority-yellow { background: rgba(224,185,85,0.12); color: var(--yellow); border: 1px solid rgba(224,185,85,0.25); }
+  .priority-green { background: rgba(85,184,122,0.12); color: var(--green); border: 1px solid rgba(85,184,122,0.25); }
+
+  /* ── CAMPAIGN CARDS ── */
+  .campaign-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .campaign-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .campaign-card:hover { border-color: rgba(200,169,110,0.3); }
+
+  .campaign-header {
+    padding: 28px 32px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .campaign-num {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--section-num);
+    line-height: 1;
+    min-width: 50px;
+  }
+
+  .campaign-meta .campaign-format {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .campaign-meta .campaign-title {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .campaign-body {
+    padding: 24px 32px;
+  }
+
+  .campaign-hook {
+    font-size: 15px;
+    color: var(--accent);
+    font-style: italic;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+
+  .campaign-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .campaign-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 48px;
+    text-align: center;
+  }
+
+  .footer-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .footer-name {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .footer-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-stats { gap: 32px; }
+    .report-section { padding: 72px 24px; }
+    .section-number { font-size: 80px; }
+    .toc-section { padding: 28px 24px; }
+    .swot-grid { grid-template-columns: 1fr; }
+    .rec-item { grid-template-columns: 1fr; }
+    .rec-num { display: none; }
+    footer { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">اسم الشركة</div>
+  <ul class="nav-links">
+    <li><a href="#overview">نظرة عامة</a></li>
+    <li><a href="#audience">الجمهور</a></li>
+    <li><a href="#services">الخدمات</a></li>
+    <li><a href="#audit">التدقيق</a></li>
+    <li><a href="#swot">SWOT</a></li>
+    <li><a href="#recs">التوصيات</a></li>
+    <li><a href="#campaigns">الحملات</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">تحليل شامل — ٢٠٢٥</div>
+  <h1 class="hero-title">اسم الشركة<br><span>Decoded</span></h1>
+  <p class="hero-subtitle">تدقيق شامل للموقع، والحضور الرقمي، واستراتيجية المحتوى، وتموضع العلامة التجارية — مع توصيات إبداعية</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-num">٠٠٠</span>
+      <span class="hero-stat-label">موظف</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">٢٠١٠</span>
+      <span class="hero-stat-label">تأسست</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">KSA</span>
+      <span class="hero-stat-label">السوق</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">B2B</span>
+      <span class="hero-stat-label">القطاع</span>
+    </div>
+  </div>
+  <div class="scroll-hint">↓ &nbsp; مرر للاستكشاف</div>
+</section>
+
+<!-- TOC -->
+<div class="toc-section">
+  <div class="toc-inner">
+    <span class="toc-label">المحتويات</span>
+    <div class="toc-links">
+      <a href="#overview">نظرة عامة</a>
+      <a href="#audience">الجمهور المستهدف</a>
+      <a href="#services">الخدمات</a>
+      <a href="#audit">التدقيق الرقمي</a>
+      <a href="#swot">تحليل SWOT</a>
+      <a href="#recs">التوصيات</a>
+      <a href="#campaigns">أفكار الحملات</a>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 01 — OVERVIEW -->
+<section id="overview">
+  <div class="report-section fade-in">
+    <div class="section-number">01</div>
+    <div class="section-label">نظرة عامة</div>
+    <h2 class="section-title">من هي الشركة؟</h2>
+
+    <div class="cards-grid">
+      <div class="card">
+        <span class="card-icon">🏢</span>
+        <div class="card-title">هوية الشركة</div>
+        <div class="card-body">
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:8px">
+            <li>• تأسست عام ٢٠١٠ — أكثر من ١٥ سنة في السوق</li>
+            <li>• مقرها الرياض — قلب المنطقة التجارية</li>
+            <li>• شهادات وجوائز محلية ودولية</li>
+            <li>• إيرادات تقديرية: أضف هنا</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <div class="card-title">تموضع العلامة التجارية</div>
+        <div class="card-body">
+          <strong style="color:var(--accent);display:block;margin-bottom:8px">"أضف جملة التموضع هنا"</strong>
+          وصف مختصر لما تفعله الشركة وكيف تتميز في السوق وما القيمة التي تقدمها لعملائها.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- SECTION 02 — AUDIENCE -->
+<section id="audience">
+  <div class="report-section fade-in">
+    <div class="section-number">02</div>
+    <div class="section-label">الجمهور المستهدف</div>
+    <h2 class="section-title">من يخاطبون؟</h2>
+
+    <div class="cards-grid">
+      <div class="card">
+        <span class="card-icon">🏛️</span>
+        <div class="card-title">الجهات الحكومية</div>
+        <div class="card-body">وصف هذا الشريحة من العملاء وما يحتاجونه من الشركة.</div>
+        <div class="card-tags">
+          <span class="tag gold">B2G</span>
+          <span class="tag">ميزانية عالية</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏢</span>
+        <div class="card-title">الشركات الكبرى</div>
+        <div class="card-body">وصف هذا الشريحة من العملاء وما يحتاجونه من الشركة.</div>
+        <div class="card-tags">
+          <span class="tag gold">B2B</span>
+          <span class="tag">CMO Level</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-icon">🚀</span>
+        <div class="card-title">الشركات الناشئة</div>
+        <div class="card-body">وصف هذا الشريحة من العملاء وما يحتاجونه من الشركة.</div>
+        <div class="card-tags">
+          <span class="tag gold">Startup</span>
+          <span class="tag">نمو سريع</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-icon">🤝</span>
+        <div class="card-title">الشركاء الاستراتيجيون</div>
+        <div class="card-body">وصف هذا الشريحة من العملاء وما يحتاجونه من الشركة.</div>
+        <div class="card-tags">
+          <span class="tag gold">Partnership</span>
+          <span class="tag">شبكة</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- SECTION 03 — SERVICES -->
+<section id="services">
+  <div class="report-section fade-in">
+    <div class="section-number">03</div>
+    <div class="section-label">الخدمات</div>
+    <h2 class="section-title">ماذا يقدمون؟</h2>
+
+    <div class="cards-grid">
+      <div class="card">
+        <span class="card-icon">⚡</span>
+        <div class="card-title">الخدمة الأولى</div>
+        <div class="card-body">
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+            <li>• عنصر أول</li>
+            <li>• عنصر ثاني</li>
+            <li>• عنصر ثالث</li>
+            <li>• عنصر رابع</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-icon">🎨</span>
+        <div class="card-title">الخدمة الثانية</div>
+        <div class="card-body">
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+            <li>• عنصر أول</li>
+            <li>• عنصر ثاني</li>
+            <li>• عنصر ثالث</li>
+            <li>• عنصر رابع</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-icon">📊</span>
+        <div class="card-title">الخدمة الثالثة</div>
+        <div class="card-body">
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+            <li>• عنصر أول</li>
+            <li>• عنصر ثاني</li>
+            <li>• عنصر ثالث</li>
+            <li>• عنصر رابع</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔮</span>
+        <div class="card-title">الخدمة الرابعة</div>
+        <div class="card-body">
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+            <li>• عنصر أول</li>
+            <li>• عنصر ثاني</li>
+            <li>• عنصر ثالث</li>
+            <li>• عنصر رابع</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- SECTION 04 — AUDIT -->
+<section id="audit">
+  <div class="report-section fade-in">
+    <div class="section-number">04</div>
+    <div class="section-label">التدقيق الرقمي</div>
+    <h2 class="section-title">تحليل الموقع والمنصات</h2>
+
+    <div class="meters-grid" id="meters">
+      <div class="meter-item">
+        <span class="meter-label">وضوح الخدمات (SEO)</span>
+        <div class="meter-bar-wrap"><div class="meter-bar" data-val="25"></div></div>
+        <span class="meter-val">25%</span>
+      </div>
+      <div class="meter-item">
+        <span class="meter-label">هيكل الصفحة</span>
+        <div class="meter-bar-wrap"><div class="meter-bar" data-val="40"></div></div>
+        <span class="meter-val">40%</span>
+      </div>
+      <div class="meter-item">
+        <span class="meter-label">عناصر الثقة</span>
+        <div class="meter-bar-wrap"><div class="meter-bar" data-val="60"></div></div>
+        <span class="meter-val">60%</span>
+      </div>
+      <div class="meter-item">
+        <span class="meter-label">اتساق الهوية البصرية</span>
+        <div class="meter-bar-wrap"><div class="meter-bar" data-val="70"></div></div>
+        <span class="meter-val">70%</span>
+      </div>
+      <div class="meter-item">
+        <span class="meter-label">وضوح CTA</span>
+        <div class="meter-bar-wrap"><div class="meter-bar" data-val="20"></div></div>
+        <span class="meter-val">20%</span>
+      </div>
+      <div class="meter-item">
+        <span class="meter-label">تجربة المستخدم</span>
+        <div class="meter-bar-wrap"><div class="meter-bar" data-val="50"></div></div>
+        <span class="meter-val">50%</span>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros-box">
+        <div class="pc-title">✓ &nbsp; نقاط القوة</div>
+        <ul class="pc-list">
+          <li>نقطة قوة أولى تكتبها هنا</li>
+          <li>نقطة قوة ثانية تكتبها هنا</li>
+          <li>نقطة قوة ثالثة تكتبها هنا</li>
+          <li>نقطة قوة رابعة تكتبها هنا</li>
+        </ul>
+      </div>
+      <div class="cons-box">
+        <div class="pc-title">✗ &nbsp; نقاط الضعف</div>
+        <ul class="pc-list">
+          <li>نقطة ضعف أولى تكتبها هنا</li>
+          <li>نقطة ضعف ثانية تكتبها هنا</li>
+          <li>نقطة ضعف ثالثة تكتبها هنا</li>
+          <li>نقطة ضعف رابعة تكتبها هنا</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- SECTION 05 — SWOT -->
+<section id="swot">
+  <div class="report-section fade-in">
+    <div class="section-number">05</div>
+    <div class="section-label">التحليل الاستراتيجي</div>
+    <h2 class="section-title">تحليل SWOT</h2>
+
+    <div class="swot-grid">
+      <div class="swot-cell">
+        <div class="swot-cell-title">Strengths — نقاط القوة</div>
+        <ul class="swot-list">
+          <li>نقطة قوة أولى</li>
+          <li>نقطة قوة ثانية</li>
+          <li>نقطة قوة ثالثة</li>
+          <li>نقطة قوة رابعة</li>
+        </ul>
+      </div>
+      <div class="swot-cell">
+        <div class="swot-cell-title">Weaknesses — نقاط الضعف</div>
+        <ul class="swot-list">
+          <li>نقطة ضعف أولى</li>
+          <li>نقطة ضعف ثانية</li>
+          <li>نقطة ضعف ثالثة</li>
+          <li>نقطة ضعف رابعة</li>
+        </ul>
+      </div>
+      <div class="swot-cell">
+        <div class="swot-cell-title">Opportunities — الفرص</div>
+        <ul class="swot-list">
+          <li>فرصة أولى</li>
+          <li>فرصة ثانية</li>
+          <li>فرصة ثالثة</li>
+          <li>فرصة رابعة</li>
+        </ul>
+      </div>
+      <div class="swot-cell">
+        <div class="swot-cell-title">Threats — التهديدات</div>
+        <ul class="swot-list">
+          <li>تهديد أول</li>
+          <li>تهديد ثاني</li>
+          <li>تهديد ثالث</li>
+          <li>تهديد رابع</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- SECTION 06 — RECS -->
+<section id="recs">
+  <div class="report-section fade-in">
+    <div class="section-number">06</div>
+    <div class="section-label">التوصيات</div>
+    <h2 class="section-title">ما الذي يجب تغييره؟</h2>
+
+    <div class="recs-list">
+      <div class="rec-item">
+        <div class="rec-num">01</div>
+        <div class="rec-content">
+          <div class="rec-title">عنوان التوصية الأولى</div>
+          <div class="rec-desc">وصف تفصيلي للتوصية وسبب أهميتها وكيف تؤثر على الأداء. كن محدداً وقابلاً للتنفيذ.</div>
+        </div>
+        <span class="priority-badge priority-red">أولوية عالية</span>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">02</div>
+        <div class="rec-content">
+          <div class="rec-title">عنوان التوصية الثانية</div>
+          <div class="rec-desc">وصف تفصيلي للتوصية وسبب أهميتها وكيف تؤثر على الأداء. كن محدداً وقابلاً للتنفيذ.</div>
+        </div>
+        <span class="priority-badge priority-red">أولوية عالية</span>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">03</div>
+        <div class="rec-content">
+          <div class="rec-title">عنوان التوصية الثالثة</div>
+          <div class="rec-desc">وصف تفصيلي للتوصية وسبب أهميتها وكيف تؤثر على الأداء. كن محدداً وقابلاً للتنفيذ.</div>
+        </div>
+        <span class="priority-badge priority-yellow">أولوية متوسطة</span>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">04</div>
+        <div class="rec-content">
+          <div class="rec-title">عنوان التوصية الرابعة</div>
+          <div class="rec-desc">وصف تفصيلي للتوصية وسبب أهميتها وكيف تؤثر على الأداء. كن محدداً وقابلاً للتنفيذ.</div>
+        </div>
+        <span class="priority-badge priority-green">أولوية منخفضة</span>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- SECTION 07 — CAMPAIGNS -->
+<section id="campaigns">
+  <div class="report-section fade-in">
+    <div class="section-number">07</div>
+    <div class="section-label">أفكار الحملات</div>
+    <h2 class="section-title">٥ أفكار إبداعية</h2>
+
+    <div class="campaign-list">
+
+      <div class="campaign-card">
+        <div class="campaign-header">
+          <div class="campaign-num">01</div>
+          <div class="campaign-meta">
+            <div class="campaign-format">Series Campaign · Carousel</div>
+            <div class="campaign-title">عنوان الحملة الأولى</div>
+          </div>
+        </div>
+        <div class="campaign-body">
+          <div class="campaign-hook">"جملة الـ Hook الرئيسية للحملة"</div>
+          <div class="campaign-desc">وصف تفصيلي للحملة: الفكرة، الفورمات، سبب النجاح، وكيف تتصل بجمهور الشركة وأهدافها. كن محدداً وإبداعياً.</div>
+          <div class="campaign-tags">
+            <span class="tag gold">شهري</span>
+            <span class="tag">LinkedIn</span>
+            <span class="tag">Authority</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="campaign-card">
+        <div class="campaign-header">
+          <div class="campaign-num">02</div>
+          <div class="campaign-meta">
+            <div class="campaign-format">Thought Leadership · Document</div>
+            <div class="campaign-title">عنوان الحملة الثانية</div>
+          </div>
+        </div>
+        <div class="campaign-body">
+          <div class="campaign-hook">"جملة الـ Hook الرئيسية للحملة"</div>
+          <div class="campaign-desc">وصف تفصيلي للحملة: الفكرة، الفورمات، سبب النجاح، وكيف تتصل بجمهور الشركة وأهدافها. كن محدداً وإبداعياً.</div>
+          <div class="campaign-tags">
+            <span class="tag gold">سنوي</span>
+            <span class="tag">Lead Magnet</span>
+            <span class="tag">B2B</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="campaign-card">
+        <div class="campaign-header">
+          <div class="campaign-num">03</div>
+          <div class="campaign-meta">
+            <div class="campaign-format">Engagement · Poll</div>
+            <div class="campaign-title">عنوان الحملة الثالثة</div>
+          </div>
+        </div>
+        <div class="campaign-body">
+          <div class="campaign-hook">"جملة الـ Hook الرئيسية للحملة"</div>
+          <div class="campaign-desc">وصف تفصيلي للحملة: الفكرة، الفورمات، سبب النجاح، وكيف تتصل بجمهور الشركة وأهدافها. كن محدداً وإبداعياً.</div>
+          <div class="campaign-tags">
+            <span class="tag gold">أسبوعي</span>
+            <span class="tag">High Reach</span>
+            <span class="tag">Engagement</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="campaign-card">
+        <div class="campaign-header">
+          <div class="campaign-num">04</div>
+          <div class="campaign-meta">
+            <div class="campaign-format">Culture · Employer Branding</div>
+            <div class="campaign-title">عنوان الحملة الرابعة</div>
+          </div>
+        </div>
+        <div class="campaign-body">
+          <div class="campaign-hook">"جملة الـ Hook الرئيسية للحملة"</div>
+          <div class="campaign-desc">وصف تفصيلي للحملة: الفكرة، الفورمات، سبب النجاح، وكيف تتصل بجمهور الشركة وأهدافها. كن محدداً وإبداعياً.</div>
+          <div class="campaign-tags">
+            <span class="tag gold">كل أسبوعين</span>
+            <span class="tag">Employer Brand</span>
+            <span class="tag">Organic</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="campaign-card">
+        <div class="campaign-header">
+          <div class="campaign-num">05</div>
+          <div class="campaign-meta">
+            <div class="campaign-format">Viral · Challenge</div>
+            <div class="campaign-title">عنوان الحملة الخامسة</div>
+          </div>
+        </div>
+        <div class="campaign-body">
+          <div class="campaign-hook">"جملة الـ Hook الرئيسية للحملة"</div>
+          <div class="campaign-desc">وصف تفصيلي للحملة: الفكرة، الفورمات، سبب النجاح، وكيف تتصل بجمهور الشركة وأهدافها. كن محدداً وإبداعياً.</div>
+          <div class="campaign-tags">
+            <span class="tag gold">ربع سنوي</span>
+            <span class="tag">Viral</span>
+            <span class="tag">Lead Gen</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-name">أعده: اسمك هنا · تحليل المحتوى والحضور الرقمي · ٢٠٢٥</div>
+    <div class="footer-note">البيانات مصدرها المواقع العامة والمنصات الرقمية</div>
+  </div>
+</footer>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = (scrollTop / docH) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.classList.add('visible');
+        // animate meters if inside this section
+        const bars = el.target.querySelectorAll('.meter-bar');
+        bars.forEach(bar => {
+          const val = bar.dataset.val;
+          setTimeout(() => { bar.style.width = val + '%'; }, 300);
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
