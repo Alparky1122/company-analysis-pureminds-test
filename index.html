@@ -647,7 +647,8 @@
   .fade-in {
     opacity: 0;
     transform: translateY(24px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    will-change: opacity, transform;
   }
 
   .fade-in.visible {
@@ -1149,30 +1150,43 @@
 </footer>
 
 <script>
-  // Progress bar
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    const docH = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = (scrollTop / docH) * 100;
-    document.getElementById('progress-bar').style.width = pct + '%';
+// Progress bar
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = (scrollTop / docH) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+});
+
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(el => {
+    if (el.isIntersecting) {
+      el.target.classList.add('visible');
+      // animate meters if inside this section
+      const bars = el.target.querySelectorAll('.meter-bar');
+      bars.forEach(bar => {
+        const val = bar.dataset.val;
+        setTimeout(() => { bar.style.width = val + '%'; }, 300);
+      });
+    }
   });
+}, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
 
-  // Fade-in on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(el => {
-      if (el.isIntersecting) {
-        el.target.classList.add('visible');
-        // animate meters if inside this section
-        const bars = el.target.querySelectorAll('.meter-bar');
-        bars.forEach(bar => {
-          const val = bar.dataset.val;
-          setTimeout(() => { bar.style.width = val + '%'; }, 300);
-        });
-      }
-    });
-  }, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+// Active nav link on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+  });
+});
 </script>
 
 </body>
