@@ -1158,11 +1158,12 @@ window.addEventListener('scroll', () => {
   document.getElementById('progress-bar').style.width = pct + '%';
 });
 
-// Fade-in on scroll
+// Fade-in on scroll - triggers as soon as element enters viewport
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(el => {
     if (el.isIntersecting) {
       el.target.classList.add('visible');
+      observer.unobserve(el.target);
       // animate meters if inside this section
       const bars = el.target.querySelectorAll('.meter-bar');
       bars.forEach(bar => {
@@ -1171,22 +1172,22 @@ const observer = new IntersectionObserver((entries) => {
       });
     }
   });
-}, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+}, { threshold: 0, rootMargin: '0px 0px 0px 0px' });
 
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
 // Active nav link on scroll
-const sections = document.querySelectorAll('section[id]');
+const sectionEls = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
 window.addEventListener('scroll', () => {
   let current = '';
-  sections.forEach(sec => {
+  sectionEls.forEach(sec => {
     if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
   });
   navLinks.forEach(a => {
     a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
   });
-});
+}, { passive: true });
 </script>
 
 </body>
